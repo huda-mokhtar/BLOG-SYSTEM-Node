@@ -37,7 +37,7 @@ const editOne = (id, data) => User.findByIdAndUpdate(id, data, { new: true }).ex
 // }
 const follow = (id, targetid) =>  {
     User.update({"_id":targetid} , { $push: { followers: id } });
-    User.update({"_id":id} , { $push: { followings: targetid} });
+    User.update({"_id":id} , { $push: { followings: targetid} }); 
 }
     // console.log('before '+id+" "+ targetid)
     //update followers for the followed
