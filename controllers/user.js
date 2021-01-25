@@ -29,32 +29,21 @@ const getAll = () => User.find({}).exec();
 
 const editOne = (id, data) => User.findByIdAndUpdate(id, data, { new: true }).exec();
 
-// const follow = async (id, targetid) =>  {
-//     await User.updateOne({id:targetid}, { $push: { followers: id } }, { new: true }).exec();
-//     //update followings for loggedin user
-//      await User.updateOne({id}, { $push: { followings: targetid } }, { new: true }).exec();
-//     return ('done');
-// }
-const follow = (id, targetid) =>  {
-    User.update({"_id":targetid} , { $push: { followers: id } });
-    User.update({"_id":id} , { $push: { followings: targetid} }); 
-}
-    // console.log('before '+id+" "+ targetid)
+const follow = (id, targetid) => {  
+    //update followings for loggedin user
+    User.findByIdAndUpdate(id, { $push: { followings: targetid } }, { new: true }).exec()
     //update followers for the followed
-  
-//    console.log('user updated'+user)
-//     //update followings for loggedin user
-//     User.update({"_id":id}, { $push: { followings: targetid } });
-// }
-
-
+    User.findByIdAndUpdate(targetid, { $push: { followers: id } }, { new: true }).exec()
+    return { "followed":"done" }
+}
+    
 
 const unfollow = (id, targetid) => {
     //update followers for the followed
     User.findByIdAndUpdate(targetid, { $pull: { followers: id } }).exec();
     //update followings for loggedin user
     User.findByIdAndUpdate(id, { $pull: { followings: targetid } }).exec();
-    return ('done');
+    return { "unfollowed":"done" }
 }
 
 const getFollowings = async (userid) => {

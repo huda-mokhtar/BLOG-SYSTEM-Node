@@ -13,7 +13,6 @@ const {create,
 const auth = require('../middlewares/auth');
 
 const router=express.Router();
-const authMiddleware = require('../middlewares/auth');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -50,7 +49,7 @@ router.get('/', async (req, res, next) => {
     }
   });
 //delete blog
-  router.delete('/:id',authMiddleware ,async (req, res, next) => {
+  router.delete('/:id',auth ,async (req, res, next) => {
     const { params : { id } } = req; 
     try {
       const blo = await deleteOne(id);
@@ -60,7 +59,7 @@ router.get('/', async (req, res, next) => {
     }
   });
 //edit blog
-router.patch('/:id',async (req, res, next) => {
+router.patch('/:id',auth,async (req, res, next) => {
     const { params: { id }, body } = req;
     try {
       const blogs = await editOne(id, body);
@@ -70,7 +69,7 @@ router.patch('/:id',async (req, res, next) => {
     }
   });
 //get blog by tag
-router.get('/tags/:tags', async (req, res, next) => {
+router.get('/tags/:tags', auth,async (req, res, next) => {
     const { params: {tags} } = req;
     try {
         const blogs = await getBlogByTag({tags});
@@ -80,7 +79,7 @@ router.get('/tags/:tags', async (req, res, next) => {
     }
 });
 //get blog by title
-router.get('/title/:title', async (req, res, next) => {
+router.get('/title/:title',auth, async (req, res, next) => {
     const { params: { title } } = req;
     try {
         const blogs = await getBlogByTitle({ title });
@@ -91,7 +90,7 @@ router.get('/title/:title', async (req, res, next) => {
 });
 
 //get blog by author
-router.get('/author/:author', async (req, res, next) => {
+router.get('/author/:author',auth, async (req, res, next) => {
     const { params: { author } } = req;
     try {
         const blogs = await getBlogByAuthor(author);
