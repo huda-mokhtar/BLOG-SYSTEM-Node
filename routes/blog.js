@@ -1,6 +1,9 @@
 const express=require('express');
 const multer =require('multer');
 const path=require('path');
+const router=express.Router();
+var cors=require('cors');
+router.use(cors())
 
 const {create,
     getAll,
@@ -12,7 +15,6 @@ const {create,
     getFollowings} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
 
-const router=express.Router();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {

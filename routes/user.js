@@ -1,7 +1,11 @@
 const express = require('express');
+const router = express.Router();
 const {create, login, getAll, editOne,follow,unfollow,getFollowers,getFollowings} = require('../controllers/user');
 const auth = require('../middlewares/auth');
-const router = express.Router();
+var cors=require('cors');
+router.use(cors())
+
+
 //register
 router.post('/', async (req, res, next) => {
     const { body } = req;
