@@ -1,6 +1,6 @@
 const express=require('express');
-const multer =require('multer');
-const path=require('path');
+// const multer =require('multer');
+// const path=require('path');
 const router=express.Router();
 var cors=require('cors');
 router.use(cors())
@@ -28,20 +28,20 @@ const auth = require('../middlewares/auth');
   //   }
   // });
   
-  const upload = multer({ storage: storage });
+  // const upload = multer({ storage: storage });
 
 //create with image
- router.post('/create',upload.single("photo"),async(req,res,next)=>{
-    const lastimage=req.file.filename;
-    console.log(lastimage);
-    const { body, user: { id } } = req;
-    try{
-        const blog=await create({ ...body,photo:lastimage, author: id });
-        res.json(blog);
-    }catch(e){
-        next(e);
-    }
-});
+//  router.post('/create',upload.single("photo"),async(req,res,next)=>{
+//     const lastimage=req.file.filename;
+//     console.log(lastimage);
+//     const { body, user: { id } } = req;
+//     try{
+//         const blog=await create({ ...body,photo:lastimage, author: id });
+//         res.json(blog);
+//     }catch(e){
+//         next(e);
+//     }
+// });
 //create
 router.post('/add',async( req ,res ,next)=>{
   const { body, user: { id } } = req;
