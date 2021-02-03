@@ -13,7 +13,7 @@ const {create,
     getBlogByTitle,
     getBlogByAuthor,
     getFollowings,
-    getMyProfile} =require('../controllers/blog');
+    getMyProfile,createe} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
 
 
@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage });
 
-
+//create with image
  router.post('/create',upload.single("photo"),async(req,res,next)=>{
     const lastimage=req.file.filename;
     console.log(lastimage);
@@ -42,6 +42,17 @@ const storage = multer.diskStorage({
         next(e);
     }
 });
+//create
+router.post('/',async( req ,res ,next)=>{
+  const { body, user: { id } } = req;
+  try {
+    const blog = await createe({ ...body ,author: id });
+    res.json(blog);
+  } catch (e) {
+    next(e);
+  }
+});
+
 
 //getAll blog
 router.get('/', async (req, res, next) => {
