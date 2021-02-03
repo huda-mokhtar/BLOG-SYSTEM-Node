@@ -1,8 +1,6 @@
 const Blog = require('../models/Blog');
 const User = require('../models/User');
 
-const createe = (blog) => Blog.create(blog) ;
-
 const create = (blog) => Blog.create(blog);
 
 const getAll = (query) => Blog.find(query).exec();
@@ -36,5 +34,5 @@ module.exports = {
     getBlogByAuthor,
     getFollowings,
     getMyProfile,
-    createe
+   
 }

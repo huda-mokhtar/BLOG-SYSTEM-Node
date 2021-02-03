@@ -13,7 +13,7 @@ const {create,
     getBlogByTitle,
     getBlogByAuthor,
     getFollowings,
-    getMyProfile,createe} =require('../controllers/blog');
+    getMyProfile,} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
 
 
@@ -43,10 +43,10 @@ const storage = multer.diskStorage({
     }
 });
 //create
-router.post('/',async( req ,res ,next)=>{
+router.post('/add',async( req ,res ,next)=>{
   const { body, user: { id } } = req;
   try {
-    const blog = await createe({ ...body ,author: id });
+    const blog = await create({ ...body ,author: id });
     res.json(blog);
   } catch (e) {
     next(e);
