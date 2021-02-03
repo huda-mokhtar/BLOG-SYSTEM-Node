@@ -8,11 +8,12 @@ router.use(cors())
 const {create,
     getAll,
     editOne,
-    deleteOne,
+    deleteBlog,
     getBlogByTag,
     getBlogByTitle,
     getBlogByAuthor,
-    getFollowings} =require('../controllers/blog');
+    getFollowings,
+    getMyProfile} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
 
 
@@ -30,11 +31,12 @@ const storage = multer.diskStorage({
   const upload = multer({ storage: storage });
 
 
- router.post('/create',auth,upload.single("photo"),async(req,res,next)=>{
+ router.post('/create',upload.single("photo"),async(req,res,next)=>{
     const lastimage=req.file.filename;
+    console.log(lastimage);
     const { body, user: { id } } = req;
     try{
-        const blog=await create({ ...body,photo:lastimage, userId: id });
+        const blog=await create({ ...body,photo:lastimage, author: id });
         res.json(blog);
     }catch(e){
         next(e);
@@ -51,21 +53,21 @@ router.get('/', async (req, res, next) => {
     }
   });
 //delete blog
-  router.delete('/:id',auth ,async (req, res, next) => {
-    const { params : { id } } = req; 
+  router.delete('/:deletedid', async (req, res, next) => {
+    const {user:{id} , params: { deletedid }} = req;
     try {
-      const blo = await deleteOne(id);
-      res.json(blo);
+      const blog = await deleteBlog(id,deletedid);
+      res.json(blog);
     } catch (e) {
       next(e);
     }
   });
 //edit blog
-router.patch('/:id',auth,async (req, res, next) => {
-    const { params: { id }, body } = req;
+  router.patch('/:editid',auth,async (req, res, next) => {
+    const { user:{id} ,params: { editid }, body } = req;
     try {
-      const blogs = await editOne(id, body);
-      res.json(blogs);
+      const blog = await editOne(id,editid, body);
+      res.json(blog);
     } catch (e) {
       next(e);
     }
@@ -111,6 +113,15 @@ router.get('/followings',auth, async (req, res, next) => {
     } catch (e) {
         next(e);
     }
+});
+router.get('/myprofile',auth,async (req, res, next) => {
+  const {user: {id}} = req;
+  try {
+    const blog = await getMyProfile({author : id});
+    res.json(blog);
+  } catch (e) {
+    next(e);
+  }
 });
 
 
