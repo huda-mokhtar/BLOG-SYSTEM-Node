@@ -1,6 +1,6 @@
 const express=require('express');
-// const multer =require('multer');
-// const path=require('path');
+const multer =require('multer');
+const path=require('path');
 const router=express.Router();
 var cors=require('cors');
 router.use(cors())
@@ -15,43 +15,35 @@ const {create,
     getFollowings,
     getMyProfile,} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
+const auth = require('../middlewares/auth');
 
 
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, 'images');
-//     },
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'images');
+    },
   
-  //   // By default, multer removes file extensions so let's add them back
-  //   filename: function(req, file, cb) {
-  //       cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
-  //   }
-  // });
+    // By default, multer removes file extensions so let's add them back
+    filename: function(req, file, cb) {
+        cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
+    }
+  });
   
-  // const upload = multer({ storage: storage });
+  const upload = multer({ storage: storage });
 
 //create with image
-//  router.post('/create',upload.single("photo"),async(req,res,next)=>{
-//     const lastimage=req.file.filename;
-//     console.log(lastimage);
-//     const { body, user: { id } } = req;
-//     try{
-//         const blog=await create({ ...body,photo:lastimage, author: id });
-//         res.json(blog);
-//     }catch(e){
-//         next(e);
-//     }
-// });
-//create
-router.post('/add',async( req ,res ,next)=>{
-  const { body, user: { id } } = req;
-  try {
-    const blog = await create({ ...body ,author: id });
-    res.json(blog);
-  } catch (e) {
-    next(e);
-  }
+ router.post('/create',auth,upload.single("photo"),async(req,res,next)=>{
+    const lastimage=req.file.filename;
+    console.log(lastimage);
+    const { body, user: { id } } = req;
+    try{
+        const blog=await create({ ...body,photo:lastimage, author: id });
+        res.json(blog);
+    }catch(e){
+        next(e);
+    }
 });
+
 
 
 //getAll blog
@@ -64,7 +56,7 @@ router.get('/', async (req, res, next) => {
     }
   });
 //delete blog
-  router.delete('/:deletedid', async (req, res, next) => {
+  router.delete('/:deletedid',auth, async (req, res, next) => {
     const {user:{id} , params: { deletedid }} = req;
     try {
       const blog = await deleteBlog(id,deletedid);
