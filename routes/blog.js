@@ -15,7 +15,6 @@ const {create,
     getFollowings,
     getMyProfile,} =require('../controllers/blog');
 const auth = require('../middlewares/auth');
-const auth = require('../middlewares/auth');
 
 
 const storage = multer.diskStorage({
