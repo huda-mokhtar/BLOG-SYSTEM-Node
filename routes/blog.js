@@ -2,6 +2,7 @@ const express=require('express');
 const multer =require('multer');
 const path=require('path');
 const router=express.Router();
+const auth = require('../middlewares/auth');
 var cors=require('cors');
 router.use(cors())
 
@@ -14,26 +15,19 @@ const {create,
     getBlogByAuthor,
     getFollowings,
     getMyProfile,} =require('../controllers/blog');
-const auth = require('../middlewares/auth');
+const blogModel = require('../models/Blog');
 
-
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'images');
-    },
-  
-    // By default, multer removes file extensions so let's add them back
+  const storage = multer.diskStorage({
+    destination: path.join(__dirname,"..","public"),
     filename: function(req, file, cb) {
         cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
     }
   });
-  
   const upload = multer({ storage: storage });
 
 //create with image
  router.post('/create',auth,upload.single("photo"),async(req,res,next)=>{
     const lastimage=req.file.filename;
-    console.log(lastimage);
     const { body, user: { id } } = req;
     try{
         const blog=await create({ ...body,photo:lastimage, author: id });
@@ -49,6 +43,8 @@ const storage = multer.diskStorage({
 router.get('/', async (req, res, next) => {
     try {
       const blogs = await getAll();
+      
+      console.log(blogModel.find().populate('author'));
       res.json(blogs);
     } catch (e) {
       next(e);
@@ -64,6 +60,7 @@ router.get('/', async (req, res, next) => {
       next(e);
     }
   });
+  
 //edit blog
   router.patch('/:editid',auth,async (req, res, next) => {
     const { user:{id} ,params: { editid }, body } = req;

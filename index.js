@@ -1,11 +1,14 @@
 const express=require('express');
-const mongoose=require('mongoose');
+// const mongoose=require('mongoose');
+const connectDB=require('./conection/db');
 const routes=require('./routes');
 const router = require('./routes/blog');
 const app =express();
-const { MONGODB_URI } = process.env;
-mongoose.connect(MONGODB_URI, { useUnifiedTopology: true }, { useNewUrlParser: true })
+connectDB();
+// const { MONGODB_URI } = process.env;
+// mongoose.connect(MONGODB_URI, { useUnifiedTopology: true }, { useNewUrlParser: true })
 // mongoose.connect('mongodb://localhost:27017/blog', { useUnifiedTopology: true});
+
 
 app.use(express.json());
 

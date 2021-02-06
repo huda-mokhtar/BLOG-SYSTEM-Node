@@ -16,8 +16,11 @@ const blogSchema=new Schema({
     author:{
         type:Schema.Types.ObjectId,
         ref:'User',
+    },
+    creartedate:{
+        type:Date,
+        default:Date.now()
     }
-
 });
 
 const blogModel=mongoose.model('Blog',blogSchema);

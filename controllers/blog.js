@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 const create = (blog) => Blog.create(blog);
 
-const getAll = (query) => Blog.find(query).exec();
+const getAll = () => Blog.find().populate('author').exec();
 
 const deleteBlog = (id,deletedid) => Blog.find( {$and :[{_id:deletedid},{author:id}]} ).remove() ;
 
@@ -23,7 +23,7 @@ const getBlogByAuthor = async (author) => {
     })
     return Blog.find({}).where('author').in(usersIds).exec()
 };
-const getFollowings = (followings) => Blog.find().where('author').in(followings);
+const getFollowings = (followings) => Blog.find().where('author').in(followings).populate('author');
 module.exports = {
     create,
     getAll,
