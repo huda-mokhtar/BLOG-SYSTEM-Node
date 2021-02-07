@@ -18,6 +18,16 @@ const userSchema = new Schema({
     maxLength: 140,
     required: true
   },
+  lastName: { 
+    type: String, 
+    maxLength: 140 
+  },
+  email: {
+     type: String,
+     unique: true 
+    },
+    job:String,
+    age:Number,
   followers: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   followings: [{ type: Schema.Types.ObjectId, ref: 'user' }]
 }, {

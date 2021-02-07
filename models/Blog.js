@@ -20,7 +20,9 @@ const blogSchema=new Schema({
     creartedate:{
         type:Date,
         default:Date.now()
-    }
+    },
+    comments: [String]
+
 });
 
 const blogModel=mongoose.model('Blog',blogSchema);
