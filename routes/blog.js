@@ -27,7 +27,13 @@ const blogModel = require('../models/Blog');
 
 //create with image
  router.post('/create',auth,upload.single("photo"),async(req,res,next)=>{
-    const lastimage=req.file.filename;
+   let lastimage;
+   if(req.file==undefined){
+    lastimage="";
+  }
+    else{
+      lastimage=req.file.filename;
+    }
     const { body, user: { id } } = req;
     try{
         const blog=await create({ ...body,photo:lastimage, author: id });
