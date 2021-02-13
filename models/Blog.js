@@ -3,14 +3,14 @@ const{Schema}=mongoose;
 
 const commentSchema = new Schema({
     author: {
-        type: Schema.Types.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:'User',
         required: true
     },
-    // authorName: {
-    //      type: String,
-    //       required: true 
-    // },
+    authorName: {
+         type: String,
+          required: true 
+    },
     body: {
         type: String,
         maxlength: 1024,

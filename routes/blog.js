@@ -144,9 +144,9 @@ router.get('/myprofile',auth,async (req, res, next) => {
 });
 //comment
 router.post('/comments/:blogid',auth, async (req, res, next) => {
-  const { user:{id} ,params: {blogid}, body } = req;
+  const { user:{id, firstName, lastName} ,params: {blogid}, body } = req;
   try{
-    const comment=await postComment(blogid,{ ...body, author: id });
+    const comment=await postComment(blogid,{ ...body, author: id , authorName: firstName+""+lastName});
     res.json(comment);
     }catch(e){
     next(e);

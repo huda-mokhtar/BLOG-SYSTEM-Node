@@ -27,8 +27,7 @@ const getBlogByAuthor = async (username) => {
 // const getBlogByAuthor =(author) =>  Blog.find({ author }).populate('author').exec();
 
 
-const postComment =(blogid, comment) => Blog.findByIdAndUpdate(blogid, { $push: { comments: comment } }, { new: true }).populate('author').exec();
-
+const postComment =(blogid, comment) => Blog.findByIdAndUpdate(blogid, { $push: { comments: comment } }, { new: true }).exec();
 const getFollowings = (followings) => Blog.find().sort({ creartedate: 'desc'}).where('author').in(followings).populate('author');
 
 module.exports = {
