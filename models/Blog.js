@@ -1,6 +1,27 @@
 const mongoose=require('mongoose');
 const{Schema}=mongoose;
 
+const commentSchema = new Schema({
+    author: {
+        type: Schema.Types.ObjectId,
+        ref:'User',
+        required: true
+    },
+    // authorName: {
+    //      type: String,
+    //       required: true 
+    // },
+    body: {
+        type: String,
+        maxlength: 1024,
+        required: true
+    },
+    creartedate:{
+        type:Date,
+        default:Date.now()
+    },
+});
+
 const blogSchema=new Schema({
     title:{
         type:String,
@@ -21,7 +42,7 @@ const blogSchema=new Schema({
         type:Date,
         default:Date.now()
     },
-    comments: [String]
+    comments: [commentSchema],
 
 });
 

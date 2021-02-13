@@ -1,5 +1,5 @@
 const express=require('express');
-// const mongoose=require('mongoose');
+const mongoose=require('mongoose');
 const connectDB=require('./conection/db');
 const routes=require('./routes');
 const router = require('./routes/blog');
@@ -9,7 +9,7 @@ connectDB();
 // mongoose.connect(MONGODB_URI, { useUnifiedTopology: true }, { useNewUrlParser: true })
 // mongoose.connect('mongodb://localhost:27017/blog', { useUnifiedTopology: true});
 
-
+app.use(express.static(__dirname+'/public'));
 app.use(express.json());
 
 app.use('/',routes);

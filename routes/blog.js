@@ -14,8 +14,11 @@ const {create,
     getBlogByTitle,
     getBlogByAuthor,
     getFollowings,
-    getMyProfile,} =require('../controllers/blog');
+    getMyProfile,
+    searchTageTitle,
+    postComment,} =require('../controllers/blog');
 const blogModel = require('../models/Blog');
+const { compareSync } = require('bcryptjs');
 
   const storage = multer.diskStorage({
     destination: path.join(__dirname,"..","public"),
@@ -97,12 +100,22 @@ router.get('/title/:title',auth, async (req, res, next) => {
         next(e);
     }
 });
-
+//get blog by title &&tage
+router.get('/search/:ser',auth, async (req, res, next) => {
+  const { params: { ser } } = req;
+  try {
+      const blogs = await searchTageTitle({ ser });
+      res.json(blogs);
+  } catch (e) {
+      next(e);
+  }
+});
 //get blog by author
 router.get('/author/:author',auth, async (req, res, next) => {
     const { params: { author } } = req;
     try {
-        const blogs = await getBlogByAuthor(author);
+        console.log(author);
+        const blogs = await  getBlogByAuthor(author);
         res.json(blogs);
     } catch (e) {
         next(e);
@@ -119,6 +132,7 @@ router.get('/followings',auth, async (req, res, next) => {
         next(e);
     }
 });
+//getMyProfile
 router.get('/myprofile',auth,async (req, res, next) => {
   const {user: {id}} = req;
   try {
@@ -128,7 +142,16 @@ router.get('/myprofile',auth,async (req, res, next) => {
     next(e);
   }
 });
-
+//comment
+router.post('/comments/:blogid',auth, async (req, res, next) => {
+  const { user:{id} ,params: {blogid}, body } = req;
+  try{
+    const comment=await postComment(blogid,{ ...body, author: id });
+    res.json(comment);
+    }catch(e){
+    next(e);
+    }
+});
 
 
 

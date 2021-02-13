@@ -45,6 +45,8 @@ router.post('/', async (req, res, next) => {
       next(e);
     }
   });
+
+  
 //follow
   router.post('/follow/:targetid',auth ,async (req, res, next) => {
     const { params: { targetid },user: { id }  } = req;

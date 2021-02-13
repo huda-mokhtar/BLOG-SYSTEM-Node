@@ -10,11 +10,14 @@ const create = (user) => User.create(user);
 const login = async ({ username, password }) => {
 
     const user = await User.findOne({ username }).exec();
+    console.log(user);
     if (!user) {
         throw Error('UN_AUTHENTICATED');
     }
-    const isVaildPass = user.validatePassword(password);
+    const isVaildPass = await user.validatePassword(password);
+    console.log(isVaildPass,password);
     if (!isVaildPass) {
+        console.log("wrong pass")
         throw Error('UN_AUTHENTICATED');
     }
     const token = await asyncSign({
@@ -27,9 +30,9 @@ const login = async ({ username, password }) => {
 
 const getAll = () => User.find({}).exec();
 
-const editOne = (id, data) => User.findByIdAndUpdate(id, data, { new: true }).exec();
+const editOne = (id, data) => User.findByIdAndUpdate(id, data, { new: true }). then(). catch(err=>{console. log(err) });
 
-const follow = (id, targetid) => {  
+const follow = async(id, targetid) => {  
     //update followings for loggedin user
     User.findByIdAndUpdate(id, { $push: { followings: targetid } }, { new: true }).exec()
     //update followers for the followed
